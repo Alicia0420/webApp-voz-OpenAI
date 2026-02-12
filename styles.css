@@ -1,0 +1,42 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+}
+
+.card {
+  max-width: 500px;
+  margin: auto;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+#mode {
+  color: #0dcaf0;
+  transition: color 0.3s ease;
+}
+
+#status {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#status:hover {
+  transform: scale(1.1);
+}
+
+#hint {
+  font-size: 0.9rem;
+  color: #adb5bd;
+}
+#history {
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+#history li {
+  border: none;
+  border-bottom: 1px solid #444;
+}
