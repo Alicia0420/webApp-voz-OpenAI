@@ -7,7 +7,7 @@ const hintDiv = document.getElementById("hint");
 const historyList = document.getElementById("history");
 
 // ---- CONFIGURACIÓN ----
-let OPENAI_API_KEY = null; // ahora se cargará desde MockAPI
+let OPENAI_API_KEY = null; // ahora dinámica
 const SUSPEND_TIME = 5000;
 let suspended = false;
 let silenceTimer;
@@ -21,28 +21,30 @@ recognition.continuous = true;
 recognition.interimResults = false;
 
 // =====================================================
-// 🔑 CARGAR API KEY DESDE MOCKAPI
+// 🔑 CARGAR API KEY SIN BLOQUEAR EL MICROFONO
 // =====================================================
 async function loadApiKey() {
   try {
     const response = await fetch("https://698df129aded595c253097c5.mockapi.io/APIKEY");
     const data = await response.json();
 
-    // Tomar el primer registro
-    OPENAI_API_KEY = data[0].APIKEY;
-
-    console.log("API KEY cargada correctamente");
+    if (data.length > 0 && data[0].APIKEY) {
+      OPENAI_API_KEY = data[0].APIKEY;
+      console.log("API KEY cargada");
+    } else {
+      console.error("No se encontró APIKEY en MockAPI");
+    }
 
   } catch (error) {
-    console.error("No se pudo cargar la API KEY:", error);
-    hintDiv.textContent = "Error cargando API KEY.";
+    console.error("Error cargando API KEY:", error);
+    hintDiv.textContent = "No se pudo cargar la API KEY";
   }
 }
 
 // ---- INICIO AUTOMÁTICO ----
-window.onload = async () => {
-  await loadApiKey();   // primero cargar key
-  startRecognition();   // luego iniciar escucha
+window.onload = () => {
+  startRecognition(); // iniciar micro inmediato
+  loadApiKey();       // cargar key en paralelo
 };
 
 // ---- FUNCIONES ----
@@ -57,6 +59,7 @@ function startRecognition() {
 
 // ---- EVENTO PRINCIPAL ----
 recognition.onresult = async (event) => {
+
   const text = event.results[event.results.length - 1][0].transcript
     .trim()
     .toLowerCase();
@@ -73,6 +76,12 @@ recognition.onresult = async (event) => {
       statusBadge.className = "badge bg-success";
       hintDiv.textContent = "";
     }
+    return;
+  }
+
+  // Si aún no hay API key
+  if (!OPENAI_API_KEY) {
+    resultDiv.textContent = "Cargando IA...";
     return;
   }
 
@@ -116,11 +125,6 @@ function addToHistory(text, order = null) {
 // =====================================================
 async function analyzeOrder(text) {
 
-  // seguridad básica
-  if (!OPENAI_API_KEY) {
-    return "API KEY no disponible";
-  }
-
   const prompt = `
 Clasifica la siguiente orden de voz.
 Responde SOLO exactamente una de estas opciones:
@@ -160,6 +164,8 @@ Orden: "${text}"
     return data.choices[0].message.content.trim();
 
   } catch (error) {
+    console.error(error);
     return "Error al interpretar la orden";
   }
 }
+
