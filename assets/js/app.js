@@ -174,7 +174,7 @@ function addToHistory(text, order = null) {
 // =====================================================
 async function analyzeOrder(text) {
 
-const prompt = `
+  const prompt = `
 Eres un clasificador estricto de comandos de movimiento.
 
 Tu única tarea es identificar la intención DIRECTA del usuario.
