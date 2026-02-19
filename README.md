@@ -41,10 +41,12 @@ Orden no reconocida
 
 ## 👩‍💻 Autor
 
-Proyecto desarrollado como práctica de interacción humano-computadora y reconocimiento de voz con inteligencia artificial.
-Docente: Ing. Victor Manuel Pinedo Fernández
-Por Alicia Yamileth Mariano Reséndiz - 22200787
+- Proyecto desarrollado como práctica de interacción humano-computadora y reconocimiento de voz con inteligencia artificial.
+- Docente: Ing. Victor Manuel Pinedo Fernández
+- Por Alicia Yamileth Mariano Reséndiz - 22200787
+
 Ingeniería en Tecnologías de la Información y Comunicaciones
+
 ---
 
 ## 📜 Licencia
